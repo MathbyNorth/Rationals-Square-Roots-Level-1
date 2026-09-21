@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rational Square Roots Level 1</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#eef4ff;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,.2);
+}
+
+button{
+    padding:10px 15px;
+    margin:5px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+input{
+    font-size:20px;
+    padding:10px;
+    width:150px;
+    text-align:center;
+}
+
+#gameArea{
+    display:none;
+}
+
+#question{
+    font-size:30px;
+    font-weight:bold;
+    margin:20px;
+}
+
+#feedback{
+    margin-top:20px;
+    padding:15px;
+    background:#f5f5f5;
+    border-radius:10px;
+    min-height:70px;
+}
+
+#scoreboard{
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎯 Rational Square Roots - Level 1</h1>
+
+<div id="menu">
+
+<p>Find the square root of rational numbers.</p>
+
+<button onclick="startGame()">
+Start Game
+</button>
+
+</div>
+
+<div id="gameArea">
+
+<div id="scoreboard">
+Question: <span id="qNum">1</span>/10 |
+Score: <span id="score">0</span>
+</div>
+
+<div id="question"></div>
+
+<input id="answer" type="number" step="0.01">
+
+<br><br>
+
+<button onclick="checkAnswer()">
+Submit
+</button>
+
+<button onclick="showSolution()">
+Solution
+</button>
+
+<button onclick="nextQuestion()">
+Next Question
+</button>
+
+<div id="feedback"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let score = 0;
+let questionNumber = 1;
+
+let currentValue;
+let currentAnswer;
+
+const questions = [
+
+{display:"25/100", value:0.25},
+{display:"16/400", value:0.04},
+{display:"36/100", value:0.36},
+{display:"144/100", value:1.44},
+{display:"225/100", value:2.25},
+{display:"625/100", value:6.25},
+{display:"0.36", value:0.36},
+{display:"1.44", value:1.44},
+{display:"2.25", value:2.25},
+{display:"6.25", value:6.25},
+{display:"81/100", value:0.81},
+{display:"121/100", value:1.21},
+{display:"196/100", value:1.96},
+{display:"324/100", value:3.24},
+{display:"169/100", value:1.69},
+{display:"49/400", value:0.1225},
+{display:"64/400", value:0.16},
+{display:"100/400", value:0.25}
+];
+
+function startGame(){
+
+    document.getElementById("menu").style.display="none";
+    document.getElementById("gameArea").style.display="block";
+
+    score = 0;
+    questionNumber = 1;
+
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("qNum").innerHTML = questionNumber;
+
+    generateQuestion();
+}
+
+function generateQuestion(){
+
+    let random =
+    questions[Math.floor(Math.random()*questions.length)];
+
+    currentValue = random.display;
+    currentAnswer = Math.sqrt(random.value);
+
+    document.getElementById("question").innerHTML =
+    "√(" + currentValue + ")";
+
+    document.getElementById("answer").value = "";
+
+    document.getElementById("feedback").innerHTML = "";
+}
+
+function checkAnswer(){
+
+    let student =
+    parseFloat(document.getElementById("answer").value);
+
+    if(isNaN(student)){
+        document.getElementById("feedback").innerHTML =
+        "Please enter an answer.";
+        return;
+    }
+
+    if(Math.abs(student-currentAnswer)<=0.02){
+
+        score++;
+
+        document.getElementById("feedback").innerHTML =
+        "✅ Correct!";
+
+    }else{
+
+        document.getElementById("feedback").innerHTML =
+        "❌ Correct Answer = "
+        + currentAnswer.toFixed(2);
+
+    }
+
+    document.getElementById("score").innerHTML = score;
+}
+
+function nextQuestion(){
+
+    questionNumber++;
+
+    if(questionNumber > 10){
+
+        let percent =
+        Math.round((score/10)*100);
+
+        document.getElementById("gameArea").innerHTML =
+
+        "<h2>Game Over</h2>" +
+
+        "<h3>Final Score: "
+        + score +
+        "/10</h3>" +
+
+        "<h3>" +
+        percent +
+        "%</h3>";
+
+        return;
+    }
+
+    document.getElementById("qNum").innerHTML =
+    questionNumber;
+
+    generateQuestion();
+}
+
+function showSolution(){
+
+    document.getElementById("feedback").innerHTML =
+
+    "<h3>Solution</h3>" +
+
+    "<p>Square root means find the number that multiplies by itself.</p>" +
+
+    "<p>√(" + currentValue + ")</p>" +
+
+    "<p>Calculator value:</p>" +
+
+    "<p><b>" +
+    currentAnswer.toFixed(2) +
+    "</b></p>";
+}
+
+</script>
+
+</body>
+</html>
